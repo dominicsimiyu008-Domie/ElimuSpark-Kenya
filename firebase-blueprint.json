@@ -1,0 +1,156 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User profile with role-based access for student, teacher, parent, or admin.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "fullName": { "type": "string" },
+        "phone": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "teacher", "parent", "admin"] },
+        "county": { "type": "string" },
+        "grade": { "type": "string" },
+        "parentPhone": { "type": "string" },
+        "tscNumber": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "fullName", "phone", "role"]
+    },
+    "TeacherProfile": {
+      "title": "Teacher Profile",
+      "description": "Public teacher profile for Kenyan verified educators in the teaching pool.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "tscNumber": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "county": { "type": "string" },
+        "qualification": { "type": "string" },
+        "teachingLevels": { "type": "array" },
+        "subjects": { "type": "array" },
+        "experienceYears": { "type": "number" },
+        "rating": { "type": "number" },
+        "reviewsCount": { "type": "number" },
+        "hourlyRateKES": { "type": "number" },
+        "bio": { "type": "string" },
+        "avatarUrl": { "type": "string" },
+        "isVerifiedTSC": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["active", "on_leave", "vetted"] },
+        "activeStudents": { "type": "number" }
+      },
+      "required": ["fullName", "phone", "qualification", "subjects"]
+    },
+    "TeacherTask": {
+      "title": "Assigned Teacher Task",
+      "description": "Task created by admin and assigned to a teacher from the pool.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "taskType": { "type": "string", "enum": ["marking", "live_session", "curriculum_prep", "remedial"] },
+        "subject": { "type": "string" },
+        "level": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "assignedBy": { "type": "string" },
+        "priority": { "type": "string", "enum": ["urgent", "high", "normal"] },
+        "dueDate": { "type": "string" },
+        "instructions": { "type": "string" },
+        "status": { "type": "string", "enum": ["assigned", "in_progress", "completed"] },
+        "targetStudent": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "completedAt": { "type": "string" }
+      },
+      "required": ["title", "teacherId", "taskType", "status", "priority"]
+    },
+    "Assignment": {
+      "title": "Student Assignment",
+      "description": "Homework or exam exercise uploaded by student for marking.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "subjectName": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "totalMarks": { "type": "number" },
+        "level": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "submitted", "graded"] },
+        "score": { "type": "number" },
+        "teacherRemarks": { "type": "string" },
+        "gradedDate": { "type": "string" },
+        "fileName": { "type": "string" },
+        "fileSize": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["studentId", "subjectId", "title", "status"]
+    },
+    "Subscription": {
+      "title": "M-Pesa Weekly Subscription",
+      "description": "Weekly 500 KES tuition subscription paid via M-Pesa to 0704641901.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "subjectName": { "type": "string" },
+        "amountKES": { "type": "number" },
+        "mpesaReceipt": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "expiring_soon", "expired"] },
+        "subscribedOn": { "type": "string" },
+        "expiresOn": { "type": "string" },
+        "phoneNumber": { "type": "string" }
+      },
+      "required": ["userId", "subjectId", "amountKES", "mpesaReceipt", "status"]
+    },
+    "LiveSession": {
+      "title": "Live Tutoring Session",
+      "description": "Live class session scheduled or active.",
+      "type": "object",
+      "properties": {
+        "subject": { "type": "string" },
+        "grade": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "teacherAvatar": { "type": "string" },
+        "startTime": { "type": "string" },
+        "endTime": { "type": "string" },
+        "topic": { "type": "string" },
+        "status": { "type": "string", "enum": ["upcoming", "live", "completed"] },
+        "meetingCode": { "type": "string" },
+        "participantsCount": { "type": "number" }
+      },
+      "required": ["subject", "teacherName", "topic", "status", "meetingCode"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "entities/User" },
+      "description": "User profiles for authenticated students, teachers, parents, and admins."
+    },
+    "/teachers/{teacherId}": {
+      "schema": { "$ref": "entities/TeacherProfile" },
+      "description": "Verified teacher pool directory."
+    },
+    "/tasks/{taskId}": {
+      "schema": { "$ref": "entities/TeacherTask" },
+      "description": "Tasks assigned by admin to pool teachers."
+    },
+    "/assignments/{assignmentId}": {
+      "schema": { "$ref": "entities/Assignment" },
+      "description": "Student homework uploads and marked solutions."
+    },
+    "/subscriptions/{subscriptionId}": {
+      "schema": { "$ref": "entities/Subscription" },
+      "description": "Weekly 500 KES M-Pesa tuition subscriptions."
+    },
+    "/liveSessions/{sessionId}": {
+      "schema": { "$ref": "entities/LiveSession" },
+      "description": "Live video classes schedule and state."
+    }
+  }
+}

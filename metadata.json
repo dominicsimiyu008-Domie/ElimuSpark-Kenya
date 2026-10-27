@@ -1,0 +1,6 @@
+{
+  "name": "ElimuSpark Kenya - Online Tuition & M-Pesa Learning",
+  "description": "Kenya's premier online tuition center connecting qualified TSC teachers with students for live video sessions, CBC and 8-4-4 national exam preparation, assignments, and weekly 500 KES M-Pesa subscriptions.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
